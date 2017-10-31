@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+	                   http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	                   http://www.springframework.org/schema/context
+	                   http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	                   ">
+
+
+    <!--    <context:property-placeholder file-encoding="utf-8"
+                                      location="classpath:jdbc.properties,classpath:mongodb.properties,classpath:email.properties"/>
+        <import resource="classpath*:conf/spring/mybatis/applicationContext.xml"/>
+        <import resource="classpath*:conf/spring/mongodb/applicationContext.xml"/>
+        <import resource="classpath*:conf/spring/mail/applicationContext.xml"/>-->
+
+    <!--<bean id="dataCache" class="com.doubibi.framework.util.cache.${cache.class}">
+        <constructor-arg>
+            <value>resources.properties</value>
+        </constructor-arg>
+    </bean>-->
+
+
+    <!-- component-scan自动搜索 @Service , @Component 持久层、业务层 控制层（Web 层） 中立层 等标注的类
+        持久层、业务层和控制层分别采用 @Repository、@Service 和 @Controller 对分层中的类进行注释，而用 @Component 对那些比较中立的类进行注释
+    -->
+
+
+    <context:annotation-config/>
+
+    <context:component-scan base-package="com.rayon" >
+    </context:component-scan>
+
+    <bean class="com.rayon.framework.PiCache"></bean>
+
+
+    <!--    &lt;!&ndash; 开启注解事务 只对当前配置文件有效 &ndash;&gt;
+        <tx:annotation-driven transaction-manager="transactionManager"/>-->
+
+</beans>

@@ -1,0 +1,17 @@
+#logindiv {
+    margin-top:20%
+}
+
+#logindiv >form > div{
+    align:center;
+    margin:30px;
+}
+
+label{
+    font-family: 隶书;
+    color: #6739e8;
+}
+#note > span{
+    font-size:0.5em;
+    color:red;
+}

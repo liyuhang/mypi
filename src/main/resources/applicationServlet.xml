@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.rayon"/>
+    <mvc:annotation-driven/>
+
+    <!--登录配置文件-->
+    <context:property-placeholder  location="classpath:login.properties"/>
+    <!-- 静态资源过滤 -->
+    <mvc:resources mapping="/scripts/**" location="/scripts/"/>
+    <mvc:resources mapping="/style/**" location="/style/"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 制定页面存放的路径 -->
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <!-- 文件的后缀 -->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+
+    <!--    <mvc:default-servlet-handler/>
+
+        <mvc:view-controller path="/"  view-name="common/index"/>
+        <mvc:view-controller path="/showVersion"  view-name="common/version"/>
+        <mvc:view-controller path="/404" view-name="common/404"/>
+
+        &lt;!&ndash; view解析器 &ndash;&gt;
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+            <property name="prefix" value="/WEB-INF/pages/"/>
+            <property name="suffix" value=".jsp"/>
+        </bean>-->
+
+    <!-- 国际化语言选择的持有，保存在cookie中，若选择SessionLocaleResolver则会在session失效后本地选择也会失效 -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="cookieName" value="clientlanguage"/>
+        <!-- in seconds. If set to -1, the cookie is not persisted (deleted when browser shuts down) -->
+        <property name="cookieMaxAge" value="100000"/>
+        <property name="defaultLocale" value="zh" />
+    </bean>
+
+    <!--    &lt;!&ndash; 国际化语言资源文件路径 &ndash;&gt;
+        <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+            <property name="basenames">
+                <list>
+                    <value>classpath:message/messages</value>
+                </list>
+            </property>
+            <property name="cacheSeconds" value="0" />
+            <property name="defaultEncoding" value="UTF-8"/>
+        </bean>-->
+
+    <!--    &lt;!&ndash; 主题文件路径 &ndash;&gt;
+        <bean id="themeSource" class="org.springframework.ui.context.support.ResourceBundleThemeSource">
+            <property name="basenamePrefix" value="theme."></property>
+        </bean>
+
+        &lt;!&ndash; 主题选择的持有 &ndash;&gt;
+        <bean id="themeResolver" class="org.springframework.web.servlet.theme.SessionThemeResolver">
+            <property name="defaultThemeName" value="themebase" />
+        </bean>-->
+
+
+    <!-- 文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="20971521" />
+    </bean>
+
+    <!--    &lt;!&ndash; 拦截器 &ndash;&gt;
+        <mvc:interceptors>
+            &lt;!&ndash; 通过参数改变本地化语言 &ndash;&gt;
+            <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+                <property name="paramName" value="locale"/>
+            </bean>
+            &lt;!&ndash; 通过参数改变主题 &ndash;&gt;
+            <bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor">
+                <property name="paramName" value="theme"></property>
+            </bean>
+            <mvc:interceptor>
+                <mvc:mapping path="/datahandler/**"/>
+                <bean class="com.doubibi.peafowl.serviceapp.datahandler.core.interceptor.SecurityInterceptor"/>
+            </mvc:interceptor>
+        </mvc:interceptors>-->
+
+    <!--拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <bean class="com.rayon.framework.LoginIntercepter"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!--转json-->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="com.rayon.framework.Jackson2HttpMessageConverter"></bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+</beans>
